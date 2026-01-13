@@ -117,13 +117,20 @@
             overflow: hidden;
             transition: all 0.4s ease;
             border: 1px solid #2a2a2a;
-            cursor: pointer;
         }
 
         .project-card:hover {
-            transform: translateY(-8px);
             border-color: #10b981;
             box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .project-header {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .project-header:hover {
+            background: #222;
         }
 
         .project-image {
@@ -154,7 +161,7 @@
             transform: translateX(100%);
         }
 
-        .project-content {
+        .project-summary {
             padding: 25px;
         }
 
@@ -162,6 +169,19 @@
             font-size: 1.5rem;
             margin-bottom: 10px;
             color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expand-icon {
+            font-size: 1.2rem;
+            color: #10b981;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(180deg);
         }
 
         .project-description {
@@ -203,13 +223,65 @@
             color: #059669;
         }
 
-        .access-note {
-            font-size: 0.85rem;
-            color: #666;
+        /* Expandable Content */
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: #151515;
+        }
+
+        .project-details.expanded {
+            max-height: 10000px;
+        }
+
+        .project-details-content {
+            padding: 30px;
+        }
+
+        .details-section {
+            margin-bottom: 30px;
+        }
+
+        .details-section h3 {
+            color: #10b981;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .details-section p {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .details-section ul {
+            color: #ccc;
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .details-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .result-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .paper-note {
+            background: #1a1a1a;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #aaa;
             font-style: italic;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #2a2a2a;
         }
 
         /* Resume Section */
@@ -290,49 +362,224 @@
         <div class="projects-grid">
             <!-- RL Project -->
             <div class="project-card">
-                <div class="project-image">🏎️</div>
-                <div class="project-content">
-                    <h3 class="project-title">Reinforcement Learning in Nondeterministic Racing</h3>
-                    <p class="project-description">
-                        Comparative analysis of Value Iteration, Q-learning, and SARSA algorithms in a racing simulator with discrete state dynamics, acceleration constraints, and crash handling variants. Evaluated algorithmic performance across varying track complexities with hyperparameter tuning to assess convergence, stability, and robustness to nondeterministic transitions.
-                    </p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Reinforcement Learning</span>
-                        <span class="tech-tag">Matplotlib</span>
-                        <span class="tech-tag">NumPy</span>
+                <div class="project-header" onclick="toggleProject('rl-details')">
+                    <div class="project-image">🏎️</div>
+                    <div class="project-summary">
+                        <div class="project-title">
+                            <span>Reinforcement Learning in Nondeterministic Racing</span>
+                            <span class="expand-icon" id="rl-icon">▼</span>
+                        </div>
+                        <p class="project-description">
+                            Comparative analysis of Value Iteration, Q-learning, and SARSA in a racing simulator with nondeterministic transitions and crash handling variants.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Reinforcement Learning</span>
+                            <span class="tech-tag">Matplotlib</span>
+                            <span class="tech-tag">NumPy</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/kevinchandran/ReinforcementLearning" target="_blank">Request Repository Access →</a>
+                        </div>
                     </div>
-                    <div class="project-links">
-                        <a href="#" onclick="alert('Video demo coming soon! I will record and upload a video demonstration of the experiments and results.'); return false;">View Demo (Coming Soon)</a>
-                        <a href="https://github.com/kevinchandran/ReinforcementLearning" target="_blank">Request Access →</a>
+                </div>
+                
+                <div class="project-details" id="rl-details">
+                    <div class="project-details-content">
+                        <div class="paper-note">
+                            📄 Full research paper available in the private GitHub repository
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Abstract</h3>
+                            <p>
+                                This paper evaluates the performance of three reinforcement learning approaches: Value Iteration, Q-learning, and SARSA. Experiments are performed on a racetrack navigation problem involving discrete state dynamics, acceleration constraints, and two crash handling variants. The results show that Value Iteration converges reliably but is highly sensitive to track dimensions. Q-learning and SARSA demonstrate faster adaptation and increased robustness to transitions, with tuned parameters providing improvements in most settings. These findings demonstrate the trade-offs between model-based and model-free methods for reinforcement learning in uncertain, unpredictable environments.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Problem Statement</h3>
+                            <p>
+                                The racetrack navigation problem presents a simplified environment where an agent must learn to drive from a start cell to a finish cell while avoiding collisions with track boundaries. This task demonstrates real-world challenges found in autonomy problems, including:
+                            </p>
+                            <ul>
+                                <li>Nondeterministic transitions (20% chance of acceleration failure)</li>
+                                <li>Two crash handling variants: reset to nearest safe cell vs. return to starting line</li>
+                                <li>Exploration-exploitation tradeoffs</li>
+                                <li>Impact of safety failures on learning stability</li>
+                            </ul>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Methodology</h3>
+                            <p>
+                                Three algorithms were evaluated on three racing tracks (2-track, U-track, W-track) with varying complexity:
+                            </p>
+                            <ul>
+                                <li><strong>Value Iteration:</strong> Model-based method using full knowledge of transition model</li>
+                                <li><strong>Q-learning:</strong> Model-free, off-policy method with epsilon-greedy exploration</li>
+                                <li><strong>SARSA:</strong> Model-free, on-policy method with epsilon-greedy exploration</li>
+                            </ul>
+                            <p>
+                                Each algorithm was tested with both default and tuned hyperparameters. Tuning involved grid search over learning rates, discount factors, and exploration schedules. Performance was measured by steps to completion, with 10 independent rollouts per configuration.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Key Results</h3>
+                            
+                            <h4 style="color: #10b981; margin-top: 20px;">Value Iteration Performance</h4>
+                            <img src="RL_1.png" alt="Value Iteration Learning Curves" class="result-image">
+                            <p>
+                                Value Iteration exhibited deterministic convergence behavior. On the U-track with crash variant 1 (left), it showed characteristic delayed convergence with a sharp drop from 2000 steps to near-zero around iteration 14. On simpler tracks like the 2-track (right), convergence occurred only at the final iteration, demonstrating sensitivity to track geometry.
+                            </p>
+
+                            <h4 style="color: #10b981; margin-top: 20px;">Q-learning Performance</h4>
+                            <img src="RL_2.png" alt="Q-learning Learning Curves" class="result-image">
+                            <p>
+                                Q-learning demonstrated rapid improvement on simpler tracks (2-track, left) with tuned parameters converging by iteration 800. On more complex tracks (U-track middle, W-track right), learning was noisier but tuned parameters consistently reduced variance and accelerated convergence. The W-track showed the most significant improvement from tuning due to its multiple turning options.
+                            </p>
+
+                            <h4 style="color: #10b981; margin-top: 20px;">SARSA Performance</h4>
+                            <img src="RL_3.png" alt="SARSA Learning Curves" class="result-image">
+                            <p>
+                                SARSA exhibited more conservative learning behavior as an on-policy algorithm. Across all tracks (W-track left and middle, U-track right), SARSA showed higher variance compared to Q-learning, particularly under crash variant 1. This is because SARSA updates values based on actions actually taken, making it more sensitive to crash-induced unexpected transitions. Tuned parameters provided consistent improvements but with smaller magnitude than Q-learning.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Key Findings</h3>
+                            <ul>
+                                <li><strong>Value Iteration:</strong> Converged reliably but showed high sensitivity to track dimensions and offered limited insight during training</li>
+                                <li><strong>Q-learning:</strong> Demonstrated fastest improvement from hyperparameter tuning and best overall convergence speed, though sensitive to crash-induced nondeterminism</li>
+                                <li><strong>SARSA:</strong> Learned more cautiously as an on-policy method, showing greater variance especially when crash resets introduced unpredictable transitions</li>
+                                <li><strong>Crash Variants:</strong> Crash variant 1 (reset to nearest safe cell) consistently introduced higher variance and slower convergence compared to variant 2 (return to start)</li>
+                                <li><strong>Hyperparameter Tuning:</strong> Substantially improved model-free algorithms' performance and stability across most settings</li>
+                            </ul>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Conclusion</h3>
+                            <p>
+                                This research demonstrates that environments with safety constraints can significantly disrupt learning, and careful parameter tuning can considerably improve performance. Model-based methods like Value Iteration benefit from complete transition knowledge but lack informativeness during training. Model-free methods show superior adaptability but require careful hyperparameter optimization to handle nondeterministic transitions effectively.
+                            </p>
+                        </div>
                     </div>
-                    <p class="access-note">
-                        Note: Repository is private due to academic honor code. Contact me for access.
-                    </p>
                 </div>
             </div>
 
             <!-- Neural Networks Project -->
             <div class="project-card">
-                <div class="project-image">🧠</div>
-                <div class="project-content">
-                    <h3 class="project-title">Neural Networks with Autoencoder Pretraining</h3>
-                    <p class="project-description">
-                        Implemented and evaluated linear/logistic regression, feedforward neural networks, and autoencoder-based networks from scratch. Conducted systematic hyperparameter tuning across classification and regression datasets using 5×2 cross-validation. Demonstrated that autoencoder pretraining significantly improves classification accuracy on nonlinear datasets while linear models excel in regression tasks.
-                    </p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Neural Networks</span>
-                        <span class="tech-tag">Matplotlib</span>
-                        <span class="tech-tag">NumPy</span>
+                <div class="project-header" onclick="toggleProject('nn-details')">
+                    <div class="project-image">🧠</div>
+                    <div class="project-summary">
+                        <div class="project-title">
+                            <span>Neural Networks with Autoencoder Pretraining</span>
+                            <span class="expand-icon" id="nn-icon">▼</span>
+                        </div>
+                        <p class="project-description">
+                            Comparative study of autoencoder-based networks versus traditional models across classification and regression tasks with systematic hyperparameter tuning.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Neural Networks</span>
+                            <span class="tech-tag">Matplotlib</span>
+                            <span class="tech-tag">NumPy</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/kevinchandran/NeuralNetworks" target="_blank">Request Repository Access →</a>
+                        </div>
                     </div>
-                    <div class="project-links">
-                        <a href="#" onclick="alert('Video demo coming soon! I will record and upload a video demonstration of the network architectures and performance results.'); return false;">View Demo (Coming Soon)</a>
-                        <a href="https://github.com/kevinchandran/NeuralNetworks" target="_blank">Request Access →</a>
+                </div>
+                
+                <div class="project-details" id="nn-details">
+                    <div class="project-details-content">
+                        <div class="paper-note">
+                            📄 Full research paper available in the private GitHub repository
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Abstract</h3>
+                            <p>
+                                This report evaluates linear and logistic regression networks, a two-layer feedforward neural network, and an autoencoder-based neural network across three classification and three regression datasets using 5×2 cross-validation. Results showed that autoencoder-based networks achieved the highest or comparable accuracy on all classification datasets, with tuning confirming their stability and advantage on nonlinear, categorical data. In contrast, linear regression consistently showed the lowest mean squared error on most regression tasks. Overall, tuning improved stability but did not change fundamental trends—autoencoder pretraining improved feature representation for classification, while linear models remained most effective for regression.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Problem Statement</h3>
+                            <p>
+                                This study investigates whether unsupervised pretraining through autoencoders improves the predictive performance of neural networks compared to traditional regression models and standard feedforward networks. While autoencoders are designed to learn compressed representations of input data, this research examines whether these representations improve prediction accuracy or generalization when used as the first hidden layer in a feedforward network.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Methodology</h3>
+                            <p>
+                                Four model architectures were implemented from scratch and evaluated:
+                            </p>
+                            <ul>
+                                <li><strong>Linear/Logistic Regression:</strong> Baseline models for regression and classification tasks</li>
+                                <li><strong>Two-Layer Feedforward Network:</strong> Standard neural network with backpropagation</li>
+                                <li><strong>Autoencoder-Based Network:</strong> Network using unsupervised pretraining followed by supervised learning</li>
+                            </ul>
+                            <p>
+                                Models were evaluated on six datasets using 5×2 cross-validation:
+                            </p>
+                            <ul>
+                                <li><strong>Classification:</strong> breast-cancer, car-evaluation, congressional-vote</li>
+                                <li><strong>Regression:</strong> abalone, computer-hardware, forest-fires</li>
+                            </ul>
+                            <p>
+                                Systematic hyperparameter tuning examined hidden layer sizes and autoencoder encoding fractions to identify optimal configurations.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Key Results</h3>
+                            
+                            <h4 style="color: #10b981; margin-top: 20px;">Classification Performance (Before Tuning)</h4>
+                            <img src="NN_1.png" alt="Classification Results Before Tuning" class="result-image">
+                            <p>
+                                Across classification tasks, the autoencoder-based network consistently achieved the highest or comparable accuracy. On breast-cancer, all models performed similarly (~0.95-0.97 accuracy) due to low dataset complexity. On car-evaluation, the autoencoder showed dramatic improvement (0.93 accuracy) compared to logistic regression and feedforward networks, effectively capturing nonlinear categorical relationships. On congressional-vote, the autoencoder slightly outperformed other models (0.95 vs. 0.93 and 0.92).
+                            </p>
+
+                            <h4 style="color: #10b981; margin-top: 20px;">Regression Performance (Before Tuning)</h4>
+                            <img src="NN_2.png" alt="Regression Results Before Tuning" class="result-image">
+                            <p>
+                                For regression tasks, linear regression remained most effective on 2 of 3 datasets. On abalone, neural models showed slight improvement (MSE ~5.3 vs. 6.9 for linear regression), demonstrating some benefit from nonlinear modeling. On computer-hardware, neural models struggled significantly (MSE ~28,000-29,000 vs. 15,000 for linear regression), suggesting convergence difficulties or data/scale incompatibility. On forest-fires, all models performed similarly (MSE ~6,300), indicating dataset complexity limited further gains.
+                            </p>
+
+                            <h4 style="color: #10b981; margin-top: 20px;">Classification Performance (After Tuning)</h4>
+                            <img src="NN_3.png" alt="Classification Results After Tuning" class="result-image">
+                            <p>
+                                Hyperparameter tuning of hidden layer sizes and encoding fractions led to slightly higher accuracies for classification tasks. The autoencoder retained its advantage on complex, multiclass datasets like car-evaluation. Tuning primarily improved stability across cross-validation folds rather than dramatically changing performance.
+                            </p>
+
+                            <h4 style="color: #10b981; margin-top: 20px;">Regression Performance (After Tuning)</h4>
+                            <img src="NN_4.png" alt="Regression Results After Tuning" class="result-image">
+                            <p>
+                                For regression tasks, tuning produced negligible changes in performance. Network depth and encoding dimensionality had limited influence on regression accuracy. Linear regression continued to outperform neural models, confirming that the autoencoder's loss function (prioritizing input variance preservation) may miss features important for numeric target prediction.
+                            </p>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Key Findings</h3>
+                            <ul>
+                                <li><strong>Classification Tasks:</strong> Autoencoder pretraining significantly improved accuracy on datasets with nonlinear or categorical features, particularly car-evaluation (0.72 → 0.93 accuracy)</li>
+                                <li><strong>Regression Tasks:</strong> Linear regression consistently achieved lowest MSE, with neural models showing limited benefit despite added complexity</li>
+                                <li><strong>Dataset Complexity:</strong> Simpler datasets (breast-cancer, forest-fires) showed similar performance across all models, indicating diminishing returns from deeper architectures</li>
+                                <li><strong>Hyperparameter Tuning:</strong> Improved convergence stability and consistency but did not fundamentally alter performance trends</li>
+                                <li><strong>Feature Representation:</strong> Autoencoder's unsupervised objective function excels at feature abstraction for classification but may miss variance correlated with regression targets</li>
+                            </ul>
+                        </div>
+
+                        <div class="details-section">
+                            <h3>Conclusion</h3>
+                            <p>
+                                This study demonstrates that neural network performance is highly data-dependent. Autoencoder pretraining offers significant advantages when feature abstraction and separability are important (classification tasks with nonlinear relationships), while linear models remain superior for datasets with predominantly linear relationships (regression tasks). The compatibility between a model's objective function and the data's underlying structure is more important than architectural complexity. Autoencoder-based networks provide excellent feature representation for classification, while standard linear regression approaches maintain strong performance for numeric prediction tasks.
+                            </p>
+                        </div>
                     </div>
-                    <p class="access-note">
-                        Note: Repository is private due to academic honor code. Contact me for access.
-                    </p>
                 </div>
             </div>
         </div>
@@ -349,5 +596,15 @@
             <p>&copy; 2025 Kevin Chandran. Built with passion and code.</p>
         </div>
     </footer>
+
+    <script>
+        function toggleProject(detailsId) {
+            const details = document.getElementById(detailsId);
+            const icon = document.getElementById(detailsId.replace('-details', '-icon'));
+            
+            details.classList.toggle('expanded');
+            icon.classList.toggle('expanded');
+        }
+    </script>
 </body>
 </html>
